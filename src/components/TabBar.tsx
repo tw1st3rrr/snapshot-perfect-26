@@ -16,7 +16,7 @@ const TabBar = () => {
 
   return (
     <div className="fixed bottom-0 left-0 right-0 z-50">
-      <div className="glass border-t border-border">
+      <div className="bg-card border-t border-border shadow-lg">
         <div className="flex items-center justify-around px-2 py-2 pb-[max(0.5rem,env(safe-area-inset-bottom))]">
           {tabs.map((tab) => {
             const isActive = location.pathname === tab.path;
@@ -29,24 +29,15 @@ const TabBar = () => {
                 className="relative flex flex-col items-center justify-center px-3 py-2 min-w-[4rem]"
                 whileTap={{ scale: 0.95 }}
               >
-                <motion.div
-                  className={`relative p-2 rounded-xl transition-colors duration-200 ${
-                    isActive ? "bg-primary" : "bg-transparent"
-                  }`}
-                  animate={{
-                    backgroundColor: isActive ? "hsl(var(--primary))" : "transparent",
-                  }}
-                >
-                  <Icon
-                    className={`w-5 h-5 transition-colors duration-200 ${
-                      isActive ? "text-primary-foreground" : "text-muted-foreground"
-                    }`}
-                    strokeWidth={isActive ? 2.5 : 2}
-                  />
-                </motion.div>
-                <span
-                  className={`mt-1 text-xs font-medium transition-colors duration-200 ${
+                <Icon
+                  className={`w-5 h-5 transition-colors duration-200 ${
                     isActive ? "text-foreground" : "text-muted-foreground"
+                  }`}
+                  strokeWidth={isActive ? 2.5 : 1.5}
+                />
+                <span
+                  className={`mt-1 text-xs transition-colors duration-200 ${
+                    isActive ? "text-foreground font-medium" : "text-muted-foreground"
                   }`}
                 >
                   {tab.label}
