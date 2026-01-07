@@ -16,7 +16,7 @@ const PageLayout = ({ children, showMenu = true, title }: PageLayoutProps) => {
           <MenuButton />
         </div>
       )}
-      <main className="pb-24">{children}</main>
+      <main className="pb-24 bg-background">{children}</main>
       <TabBar />
     </div>
   );
