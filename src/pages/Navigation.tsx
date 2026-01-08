@@ -46,7 +46,7 @@ const Navigation = () => {
   const floors = [3, 2, 1, "P"];
 
   return (
-    <PageLayout showMenu={false}>
+    <PageLayout>
       {/* Map Area - 60-70% height */}
       <div className="relative h-[65vh] bg-gray-100 overflow-hidden">
         {/* 3D Map Placeholder */}

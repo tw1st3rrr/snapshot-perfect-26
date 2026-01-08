@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { Heart, Clock, Star, Menu } from "lucide-react";
+import { Heart, Clock, Star } from "lucide-react";
 import { useState } from "react";
 import PageLayout from "@/components/PageLayout";
 
@@ -103,21 +103,16 @@ const Cinema = () => {
   });
 
   return (
-    <PageLayout showMenu={false}>
-      <div className="px-4 pt-4 pb-6 bg-gray-50 min-h-screen">
+    <PageLayout>
+      <div className="px-4 pt-16 pb-6 bg-gray-50 min-h-screen">
         {/* Header */}
-        <div className="flex items-center justify-between mb-1">
-          <div>
-            <h1 className="text-2xl font-bold text-gray-900">
-              Кинотеатр
-            </h1>
-            <p className="text-gray-500 text-sm mt-0.5">
-              Сегодня в кино
-            </p>
-          </div>
-          <button className="w-10 h-10 rounded-xl bg-white border border-gray-200 flex items-center justify-center">
-            <Menu className="w-5 h-5 text-gray-600" />
-          </button>
+        <div className="mb-1">
+          <h1 className="text-2xl font-bold text-gray-900">
+            Кинотеатр
+          </h1>
+          <p className="text-gray-500 text-sm mt-0.5">
+            Сегодня в кино
+          </p>
         </div>
 
         {/* Date Selector */}
