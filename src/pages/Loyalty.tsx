@@ -1,7 +1,7 @@
 import { motion } from "framer-motion";
 import { Star, Camera, QrCode, Mail, ChevronRight, Trophy, Gift, Plane, Ticket, HelpCircle, Info, Menu } from "lucide-react";
 import PageLayout from "@/components/PageLayout";
-import { useState } from "react";
+import { useState, useRef } from "react";
 import {
   Dialog,
   DialogContent,
@@ -36,12 +36,24 @@ const spendCategories = [
   { icon: Star, label: "Комплименты" },
 ];
 
+const rewards = [
+  { id: 1, name: "Кофе в подарок", points: 500, image: "https://images.unsplash.com/photo-1509042239860-f550ce710b93?w=150&h=150&fit=crop" },
+  { id: 2, name: "Скидка 20%", points: 1000, image: "https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?w=150&h=150&fit=crop" },
+  { id: 3, name: "Бесплатная парковка", points: 750, image: "https://images.unsplash.com/photo-1506521781263-d8422e82f27a?w=150&h=150&fit=crop" },
+  { id: 4, name: "Промокод Ozon", points: 2000, image: "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=150&h=150&fit=crop" },
+  { id: 5, name: "Билет в кино", points: 1500, image: "https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?w=150&h=150&fit=crop" },
+  { id: 6, name: "Мерч ТЦ", points: 3000, image: "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=150&h=150&fit=crop" },
+  { id: 7, name: "Сертификат СПА", points: 5000, image: "https://images.unsplash.com/photo-1544161515-4ab6ce6db874?w=150&h=150&fit=crop" },
+  { id: 8, name: "Подарочная карта", points: 4000, image: "https://images.unsplash.com/photo-1549465220-1a8b9238cd48?w=150&h=150&fit=crop" },
+];
+
 const currentTier = tiers[2]; // Gold for demo
 const userPoints = 12450;
 const progressToNext = 75;
 
 const Loyalty = () => {
   const [helpOpen, setHelpOpen] = useState(false);
+  const scrollRef = useRef<HTMLDivElement>(null);
 
   return (
     <PageLayout showMenu={false}>
@@ -214,44 +226,46 @@ const Loyalty = () => {
           </div>
         </motion.div>
 
-        {/* Program Details Accordion */}
+        {/* Rewards Showcase - 2 rows horizontally scrollable */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.45 }}
           className="mt-6"
         >
-          <Accordion type="single" collapsible className="bg-white rounded-xl border border-gray-200">
-            <AccordionItem value="details" className="border-none">
-              <AccordionTrigger className="px-4 py-3 hover:no-underline">
-                <div className="flex items-center gap-2">
-                  <Info className="w-4 h-4 text-gray-500" />
-                  <span className="text-sm font-medium text-gray-900">Детальное описание программы</span>
-                </div>
-              </AccordionTrigger>
-              <AccordionContent className="px-4 pb-4">
-                <div className="space-y-4 text-sm text-gray-600">
-                  <div>
-                    <p className="font-semibold text-gray-900 mb-2">Условия начисления баллов:</p>
-                    <ul className="space-y-1 list-disc list-inside">
-                      <li>Баллы начисляются за каждую покупку от 100 ₽</li>
-                      <li>1 балл = 1 ₽ при обмене на вознаграждения</li>
-                      <li>Баллы действительны 12 месяцев с момента начисления</li>
-                    </ul>
+          <div className="flex items-center justify-between mb-3">
+            <h2 className="text-lg font-semibold text-gray-900">
+              Витрина наград
+            </h2>
+            <button className="flex items-center gap-1 text-sm text-gray-500">
+              Все
+              <ChevronRight className="w-4 h-4" />
+            </button>
+          </div>
+
+          <div 
+            ref={scrollRef}
+            className="overflow-x-auto pb-2 scrollbar-hide"
+          >
+            <div className="grid grid-rows-2 grid-flow-col gap-3 w-max">
+              {rewards.map((reward) => (
+                <button
+                  key={reward.id}
+                  className="w-36 bg-white rounded-xl border border-gray-200 overflow-hidden hover:border-gray-300 transition-colors text-left"
+                >
+                  <img
+                    src={reward.image}
+                    alt={reward.name}
+                    className="w-full h-20 object-cover"
+                  />
+                  <div className="p-2.5">
+                    <p className="text-sm font-medium text-gray-900 line-clamp-1">{reward.name}</p>
+                    <p className="text-xs text-amber-600 font-semibold mt-0.5">{reward.points.toLocaleString()} баллов</p>
                   </div>
-                  <div>
-                    <p className="font-semibold text-gray-900 mb-2">Преимущества уровней:</p>
-                    <ul className="space-y-2">
-                      <li><span className="text-blue-500 font-medium">Синий:</span> 5% кешбэк, доступ к базовым акциям</li>
-                      <li><span className="text-gray-500 font-medium">Серебро:</span> 7% кешбэк, ранний доступ к распродажам</li>
-                      <li><span className="text-amber-500 font-medium">Золото:</span> 10% кешбэк, приоритетное обслуживание, эксклюзивные предложения</li>
-                      <li><span className="text-gray-400 font-medium">Платина:</span> 15% кешбэк, персональный менеджер, VIP-мероприятия</li>
-                    </ul>
-                  </div>
-                </div>
-              </AccordionContent>
-            </AccordionItem>
-          </Accordion>
+                </button>
+              ))}
+            </div>
+          </div>
         </motion.div>
 
         {/* Recent Transactions */}
@@ -297,7 +311,7 @@ const Loyalty = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.6 }}
-          className="mt-6 mb-4"
+          className="mt-6"
         >
           <h2 className="text-lg font-semibold text-gray-900 mb-3">
             Уровни программы
@@ -329,6 +343,46 @@ const Loyalty = () => {
               );
             })}
           </div>
+        </motion.div>
+
+        {/* Program Details Accordion - Moved to bottom */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.65 }}
+          className="mt-6 mb-4"
+        >
+          <Accordion type="single" collapsible className="bg-white rounded-xl border border-gray-200">
+            <AccordionItem value="details" className="border-none">
+              <AccordionTrigger className="px-4 py-3 hover:no-underline">
+                <div className="flex items-center gap-2">
+                  <Info className="w-4 h-4 text-gray-500" />
+                  <span className="text-sm font-medium text-gray-900">Детальное описание программы</span>
+                </div>
+              </AccordionTrigger>
+              <AccordionContent className="px-4 pb-4">
+                <div className="space-y-4 text-sm text-gray-600">
+                  <div>
+                    <p className="font-semibold text-gray-900 mb-2">Условия начисления баллов:</p>
+                    <ul className="space-y-1 list-disc list-inside">
+                      <li>Баллы начисляются за каждую покупку от 100 ₽</li>
+                      <li>1 балл = 1 ₽ при обмене на вознаграждения</li>
+                      <li>Баллы действительны 12 месяцев с момента начисления</li>
+                    </ul>
+                  </div>
+                  <div>
+                    <p className="font-semibold text-gray-900 mb-2">Преимущества уровней:</p>
+                    <ul className="space-y-2">
+                      <li><span className="text-blue-500 font-medium">Синий:</span> 5% кешбэк, доступ к базовым акциям</li>
+                      <li><span className="text-gray-500 font-medium">Серебро:</span> 7% кешбэк, ранний доступ к распродажам</li>
+                      <li><span className="text-amber-500 font-medium">Золото:</span> 10% кешбэк, приоритетное обслуживание, эксклюзивные предложения</li>
+                      <li><span className="text-gray-400 font-medium">Платина:</span> 15% кешбэк, персональный менеджер, VIP-мероприятия</li>
+                    </ul>
+                  </div>
+                </div>
+              </AccordionContent>
+            </AccordionItem>
+          </Accordion>
         </motion.div>
       </div>
     </PageLayout>
