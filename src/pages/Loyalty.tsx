@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { Star, Camera, QrCode, Mail, ChevronRight, Trophy, Gift, Plane, Ticket, HelpCircle, Info, Menu } from "lucide-react";
+import { Star, Camera, QrCode, Mail, ChevronRight, Trophy, Gift, Plane, Ticket, HelpCircle, Info } from "lucide-react";
 import PageLayout from "@/components/PageLayout";
 import { useState, useRef } from "react";
 import {
@@ -56,16 +56,13 @@ const Loyalty = () => {
   const scrollRef = useRef<HTMLDivElement>(null);
 
   return (
-    <PageLayout showMenu={false}>
-      <div className="px-4 pt-4 pb-6 bg-gray-50 min-h-screen">
+    <PageLayout>
+      <div className="px-4 pt-16 pb-6 bg-gray-50 min-h-screen">
         {/* Header */}
-        <div className="flex items-center justify-between mb-6">
+        <div className="mb-6">
           <h1 className="text-2xl font-bold text-gray-900">
             Программа лояльности
           </h1>
-          <button className="w-10 h-10 rounded-xl bg-white border border-gray-200 flex items-center justify-center">
-            <Menu className="w-5 h-5 text-gray-600" />
-          </button>
         </div>
 
         {/* Points Card */}
