@@ -98,30 +98,28 @@ const Navigation = () => {
           if (info.offset.y > 50) setIsExpanded(false);
         }}
       >
-        {/* Drag Handle + Parking FAB */}
-        <div className="relative">
-          <button
-            onClick={() => setIsExpanded(!isExpanded)}
-            className="w-full py-3 flex justify-center"
-          >
-            <div className="w-10 h-1 bg-gray-300 rounded-full" />
-          </button>
+        {/* Parking FAB - Fixed to top right corner of bottom sheet */}
+        <motion.button
+          onClick={() => setIsParkingOpen(true)}
+          className="absolute -top-7 right-4 w-14 h-14 rounded-full bg-amber-400 shadow-lg flex items-center justify-center z-40"
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
+        >
+          <Car className="w-6 h-6 text-gray-900" />
+          {isCarLinked && (
+            <span className="absolute -top-1 -right-1 w-5 h-5 bg-green-500 rounded-full flex items-center justify-center">
+              <Clock className="w-3 h-3 text-white" />
+            </span>
+          )}
+        </motion.button>
 
-          {/* Parking FAB - Attached to top right of bottom sheet */}
-          <motion.button
-            onClick={() => setIsParkingOpen(true)}
-            className="absolute -top-7 right-4 w-14 h-14 rounded-full bg-amber-400 shadow-lg flex items-center justify-center z-40"
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-          >
-            <Car className="w-6 h-6 text-gray-900" />
-            {isCarLinked && (
-              <span className="absolute -top-1 -right-1 w-5 h-5 bg-green-500 rounded-full flex items-center justify-center">
-                <Clock className="w-3 h-3 text-white" />
-              </span>
-            )}
-          </motion.button>
-        </div>
+        {/* Drag Handle */}
+        <button
+          onClick={() => setIsExpanded(!isExpanded)}
+          className="w-full py-3 flex justify-center"
+        >
+          <div className="w-10 h-1 bg-gray-300 rounded-full" />
+        </button>
 
         <div className="px-4 pb-6">
           {/* Search Bar */}
