@@ -1,7 +1,7 @@
-import { motion } from "framer-motion";
-import { Star, Camera, QrCode, Mail, ChevronRight, Trophy, Gift, Plane, Ticket, HelpCircle, Info } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
+import { Star, Camera, QrCode, Mail, ChevronRight, Trophy, Gift, Plane, Ticket, HelpCircle, Info, ArrowLeft, X } from "lucide-react";
 import PageLayout from "@/components/PageLayout";
-import { useState, useRef } from "react";
+import { useState } from "react";
 import {
   Dialog,
   DialogContent,
@@ -15,6 +15,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 
 const tiers = [
   { id: "bronze", name: "Bronze", color: "bg-amber-700", cashback: 5, threshold: 0 },
@@ -27,22 +28,29 @@ const recentTransactions = [
   { id: 1, store: "Zara", amount: 250, date: "Today, 14:32" },
   { id: 2, store: "Starbucks", amount: 45, date: "Yesterday, 10:15" },
   { id: 3, store: "Nike", amount: 380, date: "Dec 23" },
+  { id: 4, store: "Sephora", amount: 120, date: "Dec 22" },
+  { id: 5, store: "Apple Store", amount: 500, date: "Dec 20" },
 ];
 
-const spendCategories = [
-  { icon: Ticket, label: "Parking" },
-  { icon: Gift, label: "Merch" },
-  { icon: Plane, label: "Air Miles" },
-  { icon: Star, label: "Treats" },
-];
+interface Reward {
+  id: number;
+  name: string;
+  points: number;
+  image: string;
+  description: string;
+  category: string;
+  validUntil: string;
+}
 
-const rewards = [
-  { id: 1, name: "Free Coffee", points: 500, image: "https://images.unsplash.com/photo-1509042239860-f550ce710b93?w=150&h=150&fit=crop" },
-  { id: 2, name: "20% Discount", points: 1000, image: "https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?w=150&h=150&fit=crop" },
-  { id: 3, name: "Free Parking", points: 750, image: "https://images.unsplash.com/photo-1506521781263-d8422e82f27a?w=150&h=150&fit=crop" },
-  { id: 4, name: "Gift Card", points: 2000, image: "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=150&h=150&fit=crop" },
-  { id: 5, name: "Cinema Ticket", points: 1500, image: "https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?w=150&h=150&fit=crop" },
-  { id: 6, name: "Mall Merch", points: 3000, image: "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=150&h=150&fit=crop" },
+const rewards: Reward[] = [
+  { id: 1, name: "Free Coffee", points: 500, image: "https://images.unsplash.com/photo-1509042239860-f550ce710b93?w=150&h=150&fit=crop", description: "Enjoy a complimentary coffee at any participating cafe in the mall. Valid for medium size drinks.", category: "Food & Drink", validUntil: "Mar 31, 2025" },
+  { id: 2, name: "20% Discount", points: 1000, image: "https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?w=150&h=150&fit=crop", description: "Get 20% off your next purchase at any fashion store. Maximum discount 2000 ₽.", category: "Shopping", validUntil: "Feb 28, 2025" },
+  { id: 3, name: "Free Parking", points: 750, image: "https://images.unsplash.com/photo-1506521781263-d8422e82f27a?w=150&h=150&fit=crop", description: "One full day of free parking at any level. Can be used on weekends.", category: "Services", validUntil: "Apr 30, 2025" },
+  { id: 4, name: "Gift Card 1000₽", points: 2000, image: "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=150&h=150&fit=crop", description: "A universal gift card valid at all stores in the mall.", category: "Shopping", validUntil: "Dec 31, 2025" },
+  { id: 5, name: "Cinema Ticket", points: 1500, image: "https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?w=150&h=150&fit=crop", description: "One free movie ticket for any 2D showing. IMAX and 3D require additional points.", category: "Entertainment", validUntil: "Mar 15, 2025" },
+  { id: 6, name: "Mall Merch", points: 3000, image: "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=150&h=150&fit=crop", description: "Exclusive mall merchandise including branded t-shirts, bags, and accessories.", category: "Exclusive", validUntil: "Jun 30, 2025" },
+  { id: 7, name: "Spa Treatment", points: 5000, image: "https://images.unsplash.com/photo-1544161515-4ab6ce6db874?w=150&h=150&fit=crop", description: "A relaxing 60-minute spa treatment at our premium wellness center.", category: "Services", validUntil: "May 31, 2025" },
+  { id: 8, name: "VIP Event Access", points: 4000, image: "https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=150&h=150&fit=crop", description: "Priority access to exclusive mall events, fashion shows, and product launches.", category: "Exclusive", validUntil: "Dec 31, 2025" },
 ];
 
 const currentTier = tiers[2];
@@ -51,6 +59,9 @@ const progressToNext = 75;
 
 const Loyalty = () => {
   const [rewardsHelpOpen, setRewardsHelpOpen] = useState(false);
+  const [selectedReward, setSelectedReward] = useState<Reward | null>(null);
+  const [showAllRewards, setShowAllRewards] = useState(false);
+  const [showAllHistory, setShowAllHistory] = useState(false);
 
   return (
     <PageLayout>
@@ -126,15 +137,19 @@ const Loyalty = () => {
                 </DialogTrigger>
                 <DialogContent className="rounded-2xl">
                   <DialogHeader><DialogTitle>About Rewards</DialogTitle></DialogHeader>
-                  <p className="text-sm text-muted-foreground">Exchange your points for exclusive rewards, discounts, and experiences. New rewards are added regularly!</p>
+                  <div className="text-sm text-muted-foreground space-y-2">
+                    <p>Exchange your loyalty points for exclusive rewards, discounts, and experiences.</p>
+                    <p>New rewards are added regularly. Points can be redeemed at any time while your account is active.</p>
+                    <p>Some rewards may have limited availability or expiration dates.</p>
+                  </div>
                 </DialogContent>
               </Dialog>
             </div>
-            <button className="flex items-center gap-1 text-sm text-muted-foreground">See All<ChevronRight className="w-4 h-4" /></button>
+            <button onClick={() => setShowAllRewards(true)} className="flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground">See All<ChevronRight className="w-4 h-4" /></button>
           </div>
           <div className="flex gap-3 overflow-x-auto pb-2 scrollbar-hide">
-            {rewards.map((reward) => (
-              <button key={reward.id} className="flex-shrink-0 w-36 bg-card rounded-xl border border-border overflow-hidden hover:border-muted-foreground transition-colors text-left">
+            {rewards.slice(0, 4).map((reward) => (
+              <button key={reward.id} onClick={() => setSelectedReward(reward)} className="flex-shrink-0 w-36 bg-card rounded-xl border border-border overflow-hidden hover:border-muted-foreground transition-colors text-left">
                 <img src={reward.image} alt={reward.name} className="w-full h-20 object-cover" />
                 <div className="p-2.5">
                   <p className="text-sm font-medium text-foreground line-clamp-1">{reward.name}</p>
@@ -149,10 +164,10 @@ const Loyalty = () => {
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.5 }} className="mt-6">
           <div className="flex items-center justify-between mb-3">
             <h2 className="text-lg font-semibold text-foreground">Earning History</h2>
-            <button className="flex items-center gap-1 text-sm text-muted-foreground">See All<ChevronRight className="w-4 h-4" /></button>
+            <button onClick={() => setShowAllHistory(true)} className="flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground">See All<ChevronRight className="w-4 h-4" /></button>
           </div>
           <div className="bg-card rounded-xl border border-border divide-y divide-border">
-            {recentTransactions.map((tx) => (
+            {recentTransactions.slice(0, 3).map((tx) => (
               <div key={tx.id} className="flex items-center justify-between p-3">
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 rounded-full bg-muted flex items-center justify-center"><Star className="w-5 h-5 text-muted-foreground" /></div>
@@ -198,6 +213,76 @@ const Loyalty = () => {
           </Accordion>
         </motion.div>
       </div>
+
+      {/* Reward Detail Modal */}
+      <Dialog open={!!selectedReward} onOpenChange={() => setSelectedReward(null)}>
+        <DialogContent className="rounded-2xl max-w-sm">
+          {selectedReward && (
+            <>
+              <img src={selectedReward.image} alt={selectedReward.name} className="w-full h-40 object-cover rounded-xl -mt-2" />
+              <DialogHeader>
+                <DialogTitle>{selectedReward.name}</DialogTitle>
+              </DialogHeader>
+              <div className="space-y-3">
+                <div className="flex items-center justify-between">
+                  <span className="text-sm text-muted-foreground">Category</span>
+                  <span className="text-sm font-medium text-foreground">{selectedReward.category}</span>
+                </div>
+                <div className="flex items-center justify-between">
+                  <span className="text-sm text-muted-foreground">Valid Until</span>
+                  <span className="text-sm font-medium text-foreground">{selectedReward.validUntil}</span>
+                </div>
+                <p className="text-sm text-muted-foreground">{selectedReward.description}</p>
+                <div className="pt-2">
+                  <button className="w-full h-12 bg-foreground text-background font-semibold rounded-xl">
+                    Redeem for {selectedReward.points.toLocaleString()} pts
+                  </button>
+                </div>
+              </div>
+            </>
+          )}
+        </DialogContent>
+      </Dialog>
+
+      {/* All Rewards Sheet */}
+      <Sheet open={showAllRewards} onOpenChange={setShowAllRewards}>
+        <SheetContent side="bottom" className="rounded-t-3xl h-[85vh]">
+          <SheetHeader className="pb-4">
+            <SheetTitle>All Rewards</SheetTitle>
+          </SheetHeader>
+          <div className="grid grid-cols-2 gap-3 overflow-y-auto pb-6">
+            {rewards.map((reward) => (
+              <button key={reward.id} onClick={() => { setShowAllRewards(false); setSelectedReward(reward); }} className="bg-card rounded-xl border border-border overflow-hidden hover:border-muted-foreground transition-colors text-left">
+                <img src={reward.image} alt={reward.name} className="w-full h-24 object-cover" />
+                <div className="p-3">
+                  <p className="font-medium text-foreground line-clamp-1">{reward.name}</p>
+                  <p className="text-sm text-amber-600 font-semibold mt-1">{reward.points.toLocaleString()} pts</p>
+                </div>
+              </button>
+            ))}
+          </div>
+        </SheetContent>
+      </Sheet>
+
+      {/* All History Sheet */}
+      <Sheet open={showAllHistory} onOpenChange={setShowAllHistory}>
+        <SheetContent side="bottom" className="rounded-t-3xl h-[85vh]">
+          <SheetHeader className="pb-4">
+            <SheetTitle>Earning History</SheetTitle>
+          </SheetHeader>
+          <div className="divide-y divide-border overflow-y-auto">
+            {recentTransactions.map((tx) => (
+              <div key={tx.id} className="flex items-center justify-between py-4">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-full bg-muted flex items-center justify-center"><Star className="w-5 h-5 text-muted-foreground" /></div>
+                  <div><p className="font-medium text-foreground">{tx.store}</p><p className="text-sm text-muted-foreground">{tx.date}</p></div>
+                </div>
+                <span className="font-semibold text-amber-500">+{tx.amount}</span>
+              </div>
+            ))}
+          </div>
+        </SheetContent>
+      </Sheet>
     </PageLayout>
   );
 };
