@@ -1,31 +1,31 @@
 import { motion, AnimatePresence } from "framer-motion";
-import { Search, MapPin, Car, Store, Utensils, ShoppingBag, Sparkles, X, QrCode, CreditCard, Navigation as NavIcon, Clock, Info, ChevronRight } from "lucide-react";
-import { useState } from "react";
+import { Search, MapPin, Car, Store, Utensils, ShoppingBag, Sparkles, X, QrCode, CreditCard, Navigation as NavIcon, Clock, Info, ChevronRight, MapPinned, History } from "lucide-react";
+import { useState, useEffect } from "react";
 import PageLayout from "@/components/PageLayout";
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 
 const categories = [
-  { id: "all", label: "Все", icon: Store },
-  { id: "fashion", label: "Мода", icon: ShoppingBag },
-  { id: "food", label: "Еда", icon: Utensils },
-  { id: "beauty", label: "Красота", icon: Sparkles },
+  { id: "all", label: "All", icon: Store },
+  { id: "fashion", label: "Fashion", icon: ShoppingBag },
+  { id: "food", label: "Food", icon: Utensils },
+  { id: "beauty", label: "Beauty", icon: Sparkles },
 ];
 
 const stores = [
-  { id: 1, name: "Zara", category: "fashion", floor: 2, section: "A", image: "https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=80&h=80&fit=crop" },
-  { id: 2, name: "H&M", category: "fashion", floor: 2, section: "B", image: "https://images.unsplash.com/photo-1441984904996-e0b6ba687e04?w=80&h=80&fit=crop" },
-  { id: 3, name: "Nike", category: "fashion", floor: 1, section: "C", image: "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=80&h=80&fit=crop" },
-  { id: 4, name: "Starbucks", category: "food", floor: 1, section: "A", image: "https://images.unsplash.com/photo-1453614512568-c4024d13c247?w=80&h=80&fit=crop" },
-  { id: 5, name: "McDonald's", category: "food", floor: 3, section: "D", image: "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=80&h=80&fit=crop" },
-  { id: 6, name: "Sephora", category: "beauty", floor: 2, section: "C", image: "https://images.unsplash.com/photo-1596462502278-27bfdc403348?w=80&h=80&fit=crop" },
-  { id: 7, name: "L'Occitane", category: "beauty", floor: 2, section: "D", image: "https://images.unsplash.com/photo-1571781926291-c477ebfd024b?w=80&h=80&fit=crop" },
-  { id: 8, name: "Apple Store", category: "fashion", floor: 1, section: "A", image: "https://images.unsplash.com/photo-1491933382434-500287f9b54b?w=80&h=80&fit=crop" },
+  { id: 1, name: "Zara", category: "fashion", floor: 2, section: "A", hours: "10:00-22:00", rating: 4.5, image: "https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=80&h=80&fit=crop" },
+  { id: 2, name: "H&M", category: "fashion", floor: 2, section: "B", hours: "10:00-22:00", rating: 4.3, image: "https://images.unsplash.com/photo-1441984904996-e0b6ba687e04?w=80&h=80&fit=crop" },
+  { id: 3, name: "Nike", category: "fashion", floor: 1, section: "C", hours: "10:00-22:00", rating: 4.7, image: "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=80&h=80&fit=crop" },
+  { id: 4, name: "Starbucks", category: "food", floor: 1, section: "A", hours: "08:00-23:00", rating: 4.4, image: "https://images.unsplash.com/photo-1453614512568-c4024d13c247?w=80&h=80&fit=crop" },
+  { id: 5, name: "McDonald's", category: "food", floor: 3, section: "D", hours: "09:00-23:00", rating: 4.0, image: "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=80&h=80&fit=crop" },
+  { id: 6, name: "Sephora", category: "beauty", floor: 2, section: "C", hours: "10:00-22:00", rating: 4.6, image: "https://images.unsplash.com/photo-1596462502278-27bfdc403348?w=80&h=80&fit=crop" },
+  { id: 7, name: "L'Occitane", category: "beauty", floor: 2, section: "D", hours: "10:00-21:00", rating: 4.5, image: "https://images.unsplash.com/photo-1571781926291-c477ebfd024b?w=80&h=80&fit=crop" },
+  { id: 8, name: "Apple Store", category: "fashion", floor: 1, section: "A", hours: "10:00-22:00", rating: 4.8, image: "https://images.unsplash.com/photo-1491933382434-500287f9b54b?w=80&h=80&fit=crop" },
 ];
 
-const parkingActions = [
-  { id: "link", label: "Привязать авто", icon: Car },
-  { id: "pay", label: "Оплатить", icon: CreditCard },
-  { id: "find", label: "Найти машину", icon: NavIcon },
+const parkingQuickActions = [
+  { id: "find", label: "Find Vehicle", icon: MapPinned },
+  { id: "map", label: "Parking Map", icon: NavIcon },
+  { id: "history", label: "History", icon: History },
 ];
 
 const Navigation = () => {
@@ -36,6 +36,7 @@ const Navigation = () => {
   const [isParkingOpen, setIsParkingOpen] = useState(false);
   const [carNumber, setCarNumber] = useState("");
   const [isCarLinked, setIsCarLinked] = useState(false);
+  const [bottomSheetHeight, setBottomSheetHeight] = useState(180);
 
   const filteredStores = stores.filter((store) => {
     const matchesSearch = store.name.toLowerCase().includes(searchQuery.toLowerCase());
@@ -45,25 +46,34 @@ const Navigation = () => {
 
   const floors = [3, 2, 1, "P"];
 
+  // Calculate floor buttons offset based on bottom sheet height
+  const floorButtonsOffset = Math.max(0, bottomSheetHeight - 100);
+
   return (
     <PageLayout>
-      {/* Map Area - 60-70% height */}
-      <div className="relative h-[65vh] bg-gray-100 overflow-hidden">
+      {/* Map Area - fills available space */}
+      <div className="relative h-[calc(100vh-80px)] bg-muted overflow-hidden">
         {/* 3D Map Placeholder */}
-        <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-b from-gray-50 to-gray-100">
+        <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-b from-muted/50 to-muted">
           <div className="text-center">
-            <div className="w-20 h-20 rounded-full bg-white shadow-md flex items-center justify-center mx-auto mb-4">
-              <MapPin className="w-10 h-10 text-gray-400" />
+            <div className="w-20 h-20 rounded-full bg-card shadow-md flex items-center justify-center mx-auto mb-4">
+              <MapPin className="w-10 h-10 text-muted-foreground" />
             </div>
-            <p className="text-gray-800 font-semibold text-lg">3D Карта ТРЦ</p>
-            <p className="text-sm text-gray-500 mt-1">
-              Интерактивная навигация
+            <p className="text-foreground font-semibold text-lg">3D Mall Map</p>
+            <p className="text-sm text-muted-foreground mt-1">
+              Interactive Navigation
             </p>
           </div>
         </div>
 
-        {/* Floor Selector - Right side */}
-        <div className="absolute right-4 top-1/2 -translate-y-1/2 bg-white rounded-2xl shadow-lg p-1.5 flex flex-col gap-1">
+        {/* Floor Selector - moves up with bottom sheet */}
+        <motion.div 
+          className="absolute right-4 bg-card rounded-2xl shadow-lg p-1.5 flex flex-col gap-1 z-20"
+          animate={{ 
+            bottom: isExpanded ? "calc(100vh - 280px)" : `${bottomSheetHeight + 80}px`
+          }}
+          transition={{ type: "spring", damping: 25, stiffness: 300 }}
+        >
           {floors.map((floor) => {
             const isActive = activeFloor === floor;
             return (
@@ -72,20 +82,39 @@ const Navigation = () => {
                 onClick={() => setActiveFloor(floor as number)}
                 className={`w-11 h-11 rounded-xl flex items-center justify-center text-sm font-semibold transition-all ${
                   isActive
-                    ? "border-2 border-gray-800 text-gray-900 bg-white"
-                    : "text-gray-500 hover:bg-gray-50"
+                    ? "border-2 border-foreground text-foreground bg-card"
+                    : "text-muted-foreground hover:bg-muted"
                 }`}
               >
                 {floor}
               </button>
             );
           })}
-        </div>
+        </motion.div>
+
+        {/* Parking FAB - Always above bottom sheet */}
+        <motion.button
+          onClick={() => setIsParkingOpen(true)}
+          className="absolute right-4 w-14 h-14 rounded-full bg-amber-400 shadow-lg flex items-center justify-center z-30"
+          animate={{ 
+            bottom: isExpanded ? "calc(100vh - 180px)" : `${bottomSheetHeight + 20}px`
+          }}
+          transition={{ type: "spring", damping: 25, stiffness: 300 }}
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
+        >
+          <Car className="w-6 h-6 text-foreground" />
+          {isCarLinked && (
+            <span className="absolute -top-1 -right-1 w-5 h-5 bg-green-500 rounded-full flex items-center justify-center">
+              <Clock className="w-3 h-3 text-white" />
+            </span>
+          )}
+        </motion.button>
       </div>
 
       {/* Bottom Sheet */}
       <motion.div
-        className="fixed bottom-20 left-0 right-0 bg-white rounded-t-3xl shadow-xl z-30"
+        className="fixed bottom-20 left-0 right-0 bg-card rounded-t-3xl shadow-xl z-20 border-t border-border"
         style={{ maxHeight: "calc(100vh - 180px)" }}
         initial={{ y: "calc(100% - 180px)" }}
         animate={{ y: isExpanded ? 0 : "calc(100% - 180px)" }}
@@ -94,50 +123,44 @@ const Navigation = () => {
         dragConstraints={{ top: 0, bottom: 0 }}
         dragElastic={0.1}
         onDragEnd={(_, info) => {
-          if (info.offset.y < -50) setIsExpanded(true);
-          if (info.offset.y > 50) setIsExpanded(false);
+          if (info.offset.y < -50) {
+            setIsExpanded(true);
+            setBottomSheetHeight(window.innerHeight - 260);
+          }
+          if (info.offset.y > 50) {
+            setIsExpanded(false);
+            setBottomSheetHeight(180);
+          }
         }}
       >
-        {/* Parking FAB - Fixed to top right corner of bottom sheet */}
-        <motion.button
-          onClick={() => setIsParkingOpen(true)}
-          className="absolute -top-7 right-4 w-14 h-14 rounded-full bg-amber-400 shadow-lg flex items-center justify-center z-40"
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
-        >
-          <Car className="w-6 h-6 text-gray-900" />
-          {isCarLinked && (
-            <span className="absolute -top-1 -right-1 w-5 h-5 bg-green-500 rounded-full flex items-center justify-center">
-              <Clock className="w-3 h-3 text-white" />
-            </span>
-          )}
-        </motion.button>
-
         {/* Drag Handle */}
         <button
-          onClick={() => setIsExpanded(!isExpanded)}
+          onClick={() => {
+            setIsExpanded(!isExpanded);
+            setBottomSheetHeight(isExpanded ? 180 : window.innerHeight - 260);
+          }}
           className="w-full py-3 flex justify-center"
         >
-          <div className="w-10 h-1 bg-gray-300 rounded-full" />
+          <div className="w-10 h-1 bg-muted-foreground/30 rounded-full" />
         </button>
 
         <div className="px-4 pb-6">
           {/* Search Bar */}
           <div className="relative">
-            <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+            <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
             <input
               type="text"
-              placeholder="Найти магазин..."
+              placeholder="Find Store..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full h-12 pl-12 pr-10 bg-gray-50 border border-gray-200 rounded-full text-gray-900 placeholder:text-gray-400 focus:outline-none focus:border-gray-400 focus:ring-1 focus:ring-gray-400 transition-colors"
+              className="w-full h-12 pl-12 pr-10 bg-muted border border-border rounded-full text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-colors"
             />
             {searchQuery && (
               <button
                 onClick={() => setSearchQuery("")}
                 className="absolute right-4 top-1/2 -translate-y-1/2"
               >
-                <X className="w-5 h-5 text-gray-400" />
+                <X className="w-5 h-5 text-muted-foreground" />
               </button>
             )}
           </div>
@@ -153,8 +176,8 @@ const Navigation = () => {
                   onClick={() => setActiveCategory(category.id)}
                   className={`flex items-center gap-2 px-4 py-2.5 rounded-full whitespace-nowrap transition-all border ${
                     isActive
-                      ? "bg-gray-900 text-white border-gray-900"
-                      : "bg-white text-gray-600 border-gray-200 hover:border-gray-300"
+                      ? "bg-foreground text-background border-foreground"
+                      : "bg-card text-muted-foreground border-border hover:border-muted-foreground"
                   }`}
                 >
                   <Icon className={`w-4 h-4 ${isActive ? "fill-current" : ""}`} />
@@ -174,22 +197,25 @@ const Navigation = () => {
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -10 }}
                   transition={{ delay: index * 0.03 }}
-                  className="w-full flex items-center justify-between p-3 hover:bg-gray-50 transition-colors border-b border-gray-100 last:border-b-0"
+                  className="w-full flex items-center justify-between p-3 hover:bg-muted/50 transition-colors border-b border-border last:border-b-0"
                 >
                   <div className="flex items-center gap-3">
                     <img
                       src={store.image}
                       alt={store.name}
-                      className="w-12 h-12 rounded-xl object-cover bg-gray-100"
+                      className="w-14 h-14 rounded-xl object-cover bg-muted"
                     />
                     <div className="text-left">
-                      <p className="font-semibold text-gray-900">{store.name}</p>
-                      <p className="text-sm text-gray-500">
-                        Этаж {store.floor}, секция {store.section}
+                      <p className="font-semibold text-foreground">{store.name}</p>
+                      <p className="text-sm text-muted-foreground">
+                        Floor {store.floor}, Section {store.section}
+                      </p>
+                      <p className="text-xs text-muted-foreground">
+                        {store.category.charAt(0).toUpperCase() + store.category.slice(1)} • {store.hours} • ⭐ {store.rating}
                       </p>
                     </div>
                   </div>
-                  <ChevronRight className="w-5 h-5 text-gray-300" />
+                  <ChevronRight className="w-5 h-5 text-muted-foreground/50" />
                 </motion.button>
               ))}
             </div>
@@ -201,60 +227,57 @@ const Navigation = () => {
       <Sheet open={isParkingOpen} onOpenChange={setIsParkingOpen}>
         <SheetContent side="bottom" className="rounded-t-3xl px-4 pb-8">
           <SheetHeader className="pb-4">
-            <SheetTitle className="text-xl font-bold text-gray-900">
-              Управление парковкой
+            <SheetTitle className="text-xl font-bold text-foreground">
+              Parking
             </SheetTitle>
           </SheetHeader>
 
           {!isCarLinked ? (
             <>
+              {/* My Vehicles Button */}
+              <button className="w-full mb-4 p-3 bg-muted rounded-xl flex items-center justify-between hover:bg-muted/80 transition-colors">
+                <div className="flex items-center gap-3">
+                  <Car className="w-5 h-5 text-muted-foreground" />
+                  <span className="font-medium text-foreground">My Vehicles</span>
+                </div>
+                <ChevronRight className="w-5 h-5 text-muted-foreground" />
+              </button>
+
               {/* Car Number Input */}
               <div className="relative mb-4">
                 <input
                   type="text"
-                  placeholder="Введите номер машины или билета"
+                  placeholder="Enter parking number"
                   value={carNumber}
                   onChange={(e) => setCarNumber(e.target.value.toUpperCase())}
-                  className="w-full h-14 px-4 pr-12 bg-gray-50 border border-gray-200 rounded-xl text-gray-900 placeholder:text-gray-400 focus:outline-none focus:border-amber-400 focus:ring-1 focus:ring-amber-400 transition-colors text-base"
+                  className="w-full h-14 px-4 pr-12 bg-muted border border-border rounded-xl text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-colors text-base"
                 />
-                <button className="absolute right-3 top-1/2 -translate-y-1/2 p-2 hover:bg-gray-100 rounded-lg transition-colors">
-                  <QrCode className="w-5 h-5 text-gray-500" />
+                <button className="absolute right-3 top-1/2 -translate-y-1/2 p-2 hover:bg-muted/80 rounded-lg transition-colors">
+                  <QrCode className="w-5 h-5 text-muted-foreground" />
                 </button>
               </div>
 
-              {/* Quick Actions */}
-              <div className="grid grid-cols-3 gap-3 mb-6">
-                {parkingActions.map((action) => {
-                  const Icon = action.icon;
-                  return (
-                    <button
-                      key={action.id}
-                      onClick={() => {
-                        if (action.id === "link" && carNumber) {
-                          setIsCarLinked(true);
-                        }
-                      }}
-                      className="flex flex-col items-center justify-center gap-2 p-4 bg-white border border-gray-200 rounded-xl hover:border-gray-300 transition-colors h-24"
-                    >
-                      <Icon className="w-6 h-6 text-gray-600" />
-                      <span className="text-xs font-medium text-gray-700 text-center">{action.label}</span>
-                    </button>
-                  );
-                })}
-              </div>
+              {/* Bind Vehicle Button */}
+              <button
+                onClick={() => carNumber && setIsCarLinked(true)}
+                disabled={!carNumber}
+                className="w-full h-14 bg-foreground text-background font-semibold rounded-xl hover:bg-foreground/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                Bind Vehicle
+              </button>
 
               {/* Tariff Info */}
-              <div className="bg-blue-50 border border-blue-100 rounded-xl p-4">
+              <div className="mt-6 bg-blue-50 dark:bg-blue-950/30 border border-blue-100 dark:border-blue-900 rounded-xl p-4">
                 <div className="flex items-start gap-3">
                   <Info className="w-5 h-5 text-blue-500 mt-0.5 flex-shrink-0" />
                   <div>
-                    <p className="font-semibold text-gray-900 mb-2">Тарифы и правила парковки</p>
-                    <ul className="text-sm text-gray-600 space-y-1">
-                      <li>• Первые 3 часа — бесплатно</li>
-                      <li>• 4-й час: 100 ₽</li>
-                      <li>• 5-й час и далее: 150 ₽/час</li>
-                      <li>• Суточный максимум: 800 ₽</li>
-                      <li>• Оплата в приложении без комиссии</li>
+                    <p className="font-semibold text-foreground mb-2">Parking Tariffs & Rules</p>
+                    <ul className="text-sm text-muted-foreground space-y-1">
+                      <li>• First 3 hours — free</li>
+                      <li>• 4th hour: 100 ₽</li>
+                      <li>• 5th hour and beyond: 150 ₽/hour</li>
+                      <li>• Daily maximum: 800 ₽</li>
+                      <li>• Payment in app without commission</li>
                     </ul>
                   </div>
                 </div>
@@ -263,52 +286,52 @@ const Navigation = () => {
           ) : (
             <>
               {/* Parking Status */}
-              <div className="bg-gray-50 rounded-xl p-4 mb-4">
+              <div className="bg-muted rounded-xl p-4 mb-4">
                 <div className="flex items-center justify-between mb-4">
-                  <span className="text-sm text-gray-500">Место</span>
-                  <span className="font-bold text-gray-900 text-lg">B2-145</span>
+                  <span className="text-sm text-muted-foreground">Space</span>
+                  <span className="font-bold text-foreground text-lg">B2-145</span>
                 </div>
                 <div className="grid grid-cols-2 gap-4">
-                  <div className="bg-white rounded-lg p-3 border border-gray-100">
+                  <div className="bg-card rounded-lg p-3 border border-border">
                     <div className="flex items-center gap-2 mb-1">
-                      <Clock className="w-4 h-4 text-gray-400" />
-                      <span className="text-xs text-gray-500">Время</span>
+                      <Clock className="w-4 h-4 text-muted-foreground" />
+                      <span className="text-xs text-muted-foreground">Parking Time</span>
                     </div>
-                    <p className="font-bold text-gray-900 text-xl">2 ч 34 мин</p>
+                    <p className="font-bold text-foreground text-xl">2 h 34 min</p>
                   </div>
-                  <div className="bg-white rounded-lg p-3 border border-gray-100">
+                  <div className="bg-card rounded-lg p-3 border border-border">
                     <div className="flex items-center gap-2 mb-1">
-                      <CreditCard className="w-4 h-4 text-gray-400" />
-                      <span className="text-xs text-gray-500">К оплате</span>
+                      <CreditCard className="w-4 h-4 text-muted-foreground" />
+                      <span className="text-xs text-muted-foreground">To Pay</span>
                     </div>
-                    <p className="font-bold text-gray-900 text-xl">350 ₽</p>
+                    <p className="font-bold text-foreground text-xl">350 ₽</p>
                   </div>
                 </div>
-                <div className="mt-3 bg-green-50 border border-green-100 rounded-lg p-3 flex items-center gap-2">
+                <div className="mt-3 bg-green-50 dark:bg-green-950/30 border border-green-100 dark:border-green-900 rounded-lg p-3 flex items-center gap-2">
                   <span className="text-green-600">⚡</span>
-                  <span className="text-sm text-green-700 font-medium">Бесплатно осталось: 26 мин</span>
+                  <span className="text-sm text-green-700 dark:text-green-400 font-medium">Free Time Left: 26 min</span>
                 </div>
               </div>
 
               {/* Quick Actions */}
               <div className="grid grid-cols-3 gap-3 mb-4">
-                {parkingActions.map((action) => {
+                {parkingQuickActions.map((action) => {
                   const Icon = action.icon;
                   return (
                     <button
                       key={action.id}
-                      className="flex flex-col items-center justify-center gap-2 p-4 bg-white border border-gray-200 rounded-xl hover:border-gray-300 transition-colors h-24"
+                      className="flex flex-col items-center justify-center gap-2 p-4 bg-card border border-border rounded-xl hover:border-muted-foreground transition-colors h-24"
                     >
-                      <Icon className="w-6 h-6 text-gray-600" />
-                      <span className="text-xs font-medium text-gray-700 text-center">{action.label}</span>
+                      <Icon className="w-6 h-6 text-muted-foreground" />
+                      <span className="text-xs font-medium text-foreground text-center">{action.label}</span>
                     </button>
                   );
                 })}
               </div>
 
               {/* Pay Button */}
-              <button className="w-full h-14 bg-gray-900 text-white font-semibold rounded-xl hover:bg-gray-800 transition-colors">
-                Оплатить парковку
+              <button className="w-full h-14 bg-foreground text-background font-semibold rounded-xl hover:bg-foreground/90 transition-colors">
+                Pay for Parking
               </button>
 
               {/* Unlink */}
@@ -317,9 +340,9 @@ const Navigation = () => {
                   setIsCarLinked(false);
                   setCarNumber("");
                 }}
-                className="w-full mt-3 text-sm text-gray-500 hover:text-gray-700"
+                className="w-full mt-3 text-sm text-muted-foreground hover:text-foreground"
               >
-                Отвязать автомобиль
+                Unlink Vehicle
               </button>
             </>
           )}

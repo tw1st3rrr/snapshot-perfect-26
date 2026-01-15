@@ -1,9 +1,17 @@
 import { motion } from "framer-motion";
-import { Zap, Car, Navigation2, Crown } from "lucide-react";
+import { Zap, Car, Navigation2, Crown, HelpCircle } from "lucide-react";
 import PageLayout from "@/components/PageLayout";
 import evChargingImage from "@/assets/ev-charging.jpg";
 import valetImage from "@/assets/valet.jpg";
 import requestVehicleImage from "@/assets/request-vehicle.jpg";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { useState } from "react";
 
 const services = [
   {
@@ -32,6 +40,8 @@ const services = [
 const exclusiveServices = ["Lounge", "Stylist", "Transfer"];
 
 const Services = () => {
+  const [vipInfoOpen, setVipInfoOpen] = useState(false);
+
   return (
     <PageLayout>
       <div className="px-4 pt-16 pb-4">
@@ -77,11 +87,11 @@ const Services = () => {
                 </div>
                 
                 {/* Right side - Image */}
-                <div className="w-2/5 relative">
+                <div className="w-2/5 relative overflow-hidden">
                   <img
                     src={service.image}
                     alt={service.title}
-                    className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                    className="absolute inset-0 w-full h-full object-cover"
                   />
                   <div className="absolute inset-0 bg-gradient-to-r from-card via-card/20 to-transparent" />
                 </div>
@@ -103,9 +113,48 @@ const Services = () => {
                 <Crown className="w-5 h-5 text-foreground" />
               </div>
               <div className="flex-1">
-                <h3 className="font-display font-semibold text-foreground">
-                  Exclusive Services
-                </h3>
+                <div className="flex items-center gap-2">
+                  <h3 className="font-display font-semibold text-foreground">
+                    Exclusive Services
+                  </h3>
+                  <Dialog open={vipInfoOpen} onOpenChange={setVipInfoOpen}>
+                    <DialogTrigger asChild>
+                      <button className="w-5 h-5 rounded-full bg-muted flex items-center justify-center hover:bg-muted/80 transition-colors">
+                        <HelpCircle className="w-3.5 h-3.5 text-muted-foreground" />
+                      </button>
+                    </DialogTrigger>
+                    <DialogContent className="rounded-2xl">
+                      <DialogHeader>
+                        <DialogTitle>Exclusive Services Access</DialogTitle>
+                      </DialogHeader>
+                      <div className="space-y-3 text-sm text-muted-foreground">
+                        <p>
+                          These services are available only for <strong className="text-foreground">Platinum</strong> loyalty program members.
+                        </p>
+                        <p>
+                          To gain access, you need to reach the maximum level of the loyalty program by accumulating 150,000+ points through purchases at our mall.
+                        </p>
+                        <div className="bg-muted/50 rounded-xl p-4 mt-4">
+                          <p className="font-semibold text-foreground mb-2">Platinum Benefits:</p>
+                          <ul className="space-y-1.5">
+                            <li className="flex items-start gap-2">
+                              <span className="text-primary">•</span>
+                              <span><strong>VIP Lounge</strong> — private relaxation area with complimentary refreshments</span>
+                            </li>
+                            <li className="flex items-start gap-2">
+                              <span className="text-primary">•</span>
+                              <span><strong>Personal Stylist</strong> — complimentary fashion consultation</span>
+                            </li>
+                            <li className="flex items-start gap-2">
+                              <span className="text-primary">•</span>
+                              <span><strong>Premium Transfer</strong> — luxury car service to/from the mall</span>
+                            </li>
+                          </ul>
+                        </div>
+                      </div>
+                    </DialogContent>
+                  </Dialog>
+                </div>
                 <p className="text-sm text-muted-foreground">
                   Available for Platinum members
                 </p>
