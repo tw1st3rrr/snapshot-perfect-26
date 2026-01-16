@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { Home, Briefcase, MapPin, Star, User } from "lucide-react";
+import { Home, Briefcase, MapPin, Star, Film } from "lucide-react";
 import { useLocation, useNavigate } from "react-router-dom";
 
 const tabs = [
@@ -7,7 +7,7 @@ const tabs = [
   { id: "services", icon: Briefcase, label: "Services", path: "/services" },
   { id: "navigation", icon: MapPin, label: "Navigation", path: "/navigation" },
   { id: "loyalty", icon: Star, label: "Loyalty", path: "/loyalty" },
-  { id: "profile", icon: User, label: "Profile", path: "/profile" },
+  { id: "cinema", icon: Film, label: "Cinema", path: "/cinema" },
 ];
 
 const TabBar = () => {
