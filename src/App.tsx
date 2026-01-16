@@ -8,6 +8,7 @@ import Services from "./pages/Services";
 import Navigation from "./pages/Navigation";
 import Loyalty from "./pages/Loyalty";
 import Cinema from "./pages/Cinema";
+import Profile from "./pages/Profile";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -24,6 +25,7 @@ const App = () => (
           <Route path="/navigation" element={<Navigation />} />
           <Route path="/loyalty" element={<Loyalty />} />
           <Route path="/cinema" element={<Cinema />} />
+          <Route path="/profile" element={<Profile />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
