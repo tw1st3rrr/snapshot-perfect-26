@@ -10,6 +10,8 @@ import {
   Clock,
   ChevronDown,
   X,
+  User,
+  Film
 } from "lucide-react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -184,6 +186,14 @@ const Home = () => {
         />
         {/* Gradient overlay - fades to background */}
         <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-transparent to-background" />
+        
+        {/* Profile icon in top right */}
+        <button 
+          onClick={() => navigate("/profile")}
+          className="absolute top-12 right-4 w-10 h-10 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center z-10"
+        >
+          <User className="w-5 h-5 text-white" />
+        </button>
         
         {/* Mall name centered on hero - clickable */}
         <div className="absolute inset-0 flex items-center justify-center">

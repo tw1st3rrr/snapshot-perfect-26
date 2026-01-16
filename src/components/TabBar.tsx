@@ -1,13 +1,13 @@
 import { motion } from "framer-motion";
-import { Home, Compass, MapPin, Star, Film } from "lucide-react";
+import { Home, Briefcase, MapPin, Star, User } from "lucide-react";
 import { useLocation, useNavigate } from "react-router-dom";
 
 const tabs = [
-  { id: "home", icon: Home, label: "Главная", path: "/" },
-  { id: "services", icon: Compass, label: "Сервисы", path: "/services" },
-  { id: "navigation", icon: MapPin, label: "Навигация", path: "/navigation" },
-  { id: "loyalty", icon: Star, label: "Лояльность", path: "/loyalty" },
-  { id: "cinema", icon: Film, label: "Кино", path: "/cinema" },
+  { id: "home", icon: Home, label: "Home", path: "/" },
+  { id: "services", icon: Briefcase, label: "Services", path: "/services" },
+  { id: "navigation", icon: MapPin, label: "Navigation", path: "/navigation" },
+  { id: "loyalty", icon: Star, label: "Loyalty", path: "/loyalty" },
+  { id: "profile", icon: User, label: "Profile", path: "/profile" },
 ];
 
 const TabBar = () => {
