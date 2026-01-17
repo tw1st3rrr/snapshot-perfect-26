@@ -173,7 +173,7 @@ const Home = () => {
   };
 
   return (
-    <PageLayout showMenu={true}>
+    <PageLayout showMenu={false}>
       {/* Header with Hero Image */}
       <div className="relative h-[35vh] min-h-[240px]">
         <motion.img
@@ -304,7 +304,7 @@ const Home = () => {
             <h2 className="font-display text-lg font-semibold text-foreground">
               Trending Now
             </h2>
-            <button className="flex items-center gap-0.5 text-sm text-muted-foreground hover:text-foreground transition-colors">
+            <button onClick={() => navigate("/stores")} className="flex items-center gap-0.5 text-sm text-muted-foreground hover:text-foreground transition-colors">
               See All
               <ChevronRight className="w-4 h-4" />
             </button>
@@ -317,18 +317,13 @@ const Home = () => {
                 initial={{ opacity: 0, x: 20 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: 0.6 + index * 0.1 }}
-                className="min-w-[160px] bg-card rounded-2xl overflow-hidden border border-border shadow-sm"
+                onClick={() => navigate(`/store/${store.id}`)}
+                className="min-w-[160px] bg-card rounded-2xl overflow-hidden border border-border shadow-sm cursor-pointer hover:border-muted-foreground transition-colors"
               >
                 <div className="relative h-24 overflow-hidden">
-                  <img 
-                    src={store.image} 
-                    alt={store.name}
-                    className="w-full h-full object-cover"
-                  />
+                  <img src={store.image} alt={store.name} className="w-full h-full object-cover" />
                   {store.discount && (
-                    <span className="absolute top-2 left-2 text-xs font-semibold px-2 py-0.5 rounded-full bg-rose-800 text-white">
-                      {store.discount}
-                    </span>
+                    <span className="absolute top-2 left-2 text-xs font-semibold px-2 py-0.5 rounded-full bg-rose-800 text-white">{store.discount}</span>
                   )}
                 </div>
                 <div className="p-3">
@@ -352,7 +347,7 @@ const Home = () => {
             <h2 className="font-display text-lg font-semibold text-foreground">
               Upcoming Events
             </h2>
-            <button className="flex items-center gap-0.5 text-sm text-muted-foreground hover:text-foreground transition-colors">
+            <button onClick={() => navigate("/events")} className="flex items-center gap-0.5 text-sm text-muted-foreground hover:text-foreground transition-colors">
               See All
               <ChevronRight className="w-4 h-4" />
             </button>
@@ -365,14 +360,11 @@ const Home = () => {
                 initial={{ opacity: 0, x: 20 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: 0.7 + index * 0.1 }}
-                className="min-w-[200px] bg-card rounded-2xl overflow-hidden border border-border shadow-sm"
+                onClick={() => navigate(`/event/${event.id}`)}
+                className="min-w-[200px] bg-card rounded-2xl overflow-hidden border border-border shadow-sm cursor-pointer hover:border-muted-foreground transition-colors"
               >
                 <div className="relative h-24 overflow-hidden">
-                  <img 
-                    src={event.image} 
-                    alt={event.title}
-                    className="w-full h-full object-cover"
-                  />
+                  <img src={event.image} alt={event.title} className="w-full h-full object-cover" />
                 </div>
                 <div className="p-3">
                   <h3 className="font-display font-semibold text-foreground">{event.title}</h3>

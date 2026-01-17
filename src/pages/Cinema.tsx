@@ -1,6 +1,7 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { Heart, Clock, Star, ArrowLeft, Play, Calendar } from "lucide-react";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import PageLayout from "@/components/PageLayout";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
@@ -254,18 +255,20 @@ const MovieDetail = ({ movie, sessions, onBack, isFavorite, onToggleFavorite, sh
           <div className="mt-6">
             <h2 className="text-lg font-semibold text-foreground mb-3">Showtimes</h2>
             <div className="space-y-2">
-              {sessions.map((session) => (
-                <motion.div key={session.id} whileTap={{ scale: 0.98 }} className="flex items-center justify-between p-3 bg-card border border-border rounded-xl cursor-pointer hover:border-primary transition-colors">
+              {sessions.map((session) => {
+                const navigate = useNavigate();
+                return (
+                <motion.div key={session.id} whileTap={{ scale: 0.98 }} onClick={() => navigate("/cinema/seats", { state: { movie, session: { ...session, date: "December 20, 2024" } } })} className="flex items-center justify-between p-3 bg-card border border-border rounded-xl cursor-pointer hover:border-primary transition-colors">
                   <div className="flex items-center gap-4">
                     <span className="text-lg font-bold text-foreground">{session.time}</span>
                     <div><p className="text-sm font-medium text-foreground">{session.hall}</p><p className="text-xs text-muted-foreground">{session.format} • {session.seatsAvailable} seats</p></div>
                   </div>
                   <div className="text-right">
                     <p className="font-semibold text-foreground">{session.price} ₽</p>
-                    <button className="text-xs text-primary font-medium mt-0.5">Select</button>
+                    <span className="text-xs text-primary font-medium mt-0.5">Select</span>
                   </div>
                 </motion.div>
-              ))}
+              );})}
             </div>
           </div>
         )}
