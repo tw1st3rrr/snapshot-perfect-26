@@ -10,6 +10,13 @@ import Loyalty from "./pages/Loyalty";
 import Cinema from "./pages/Cinema";
 import Profile from "./pages/Profile";
 import NotFound from "./pages/NotFound";
+import AllStores from "./pages/AllStores";
+import AllEvents from "./pages/AllEvents";
+import StoreDetail from "./pages/StoreDetail";
+import EventDetail from "./pages/EventDetail";
+import SeatSelection from "./pages/SeatSelection";
+import CinemaPayment from "./pages/CinemaPayment";
+import BookingConfirmation from "./pages/BookingConfirmation";
 
 const queryClient = new QueryClient();
 
@@ -25,8 +32,14 @@ const App = () => (
           <Route path="/navigation" element={<Navigation />} />
           <Route path="/loyalty" element={<Loyalty />} />
           <Route path="/cinema" element={<Cinema />} />
+          <Route path="/cinema/seats" element={<SeatSelection />} />
+          <Route path="/cinema/payment" element={<CinemaPayment />} />
+          <Route path="/cinema/confirmation" element={<BookingConfirmation />} />
           <Route path="/profile" element={<Profile />} />
-          {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+          <Route path="/stores" element={<AllStores />} />
+          <Route path="/store/:id" element={<StoreDetail />} />
+          <Route path="/events" element={<AllEvents />} />
+          <Route path="/event/:id" element={<EventDetail />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
