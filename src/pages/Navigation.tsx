@@ -1,7 +1,7 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { Search, MapPin, Car, Store, Utensils, ShoppingBag, Sparkles, X, QrCode, CreditCard, Navigation as NavIcon, Clock, Info, ChevronRight, MapPinned, History, Plus, Check, ArrowLeft, Gift, Trash2, Camera } from "lucide-react";
 import { useState, useEffect } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import PageLayout from "@/components/PageLayout";
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -58,6 +58,7 @@ interface PaymentMethod {
 
 const Navigation = () => {
   const location = useLocation();
+  const navigate = useNavigate();
   const [isExpanded, setIsExpanded] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [activeCategory, setActiveCategory] = useState("all");
@@ -263,6 +264,7 @@ const Navigation = () => {
               {filteredStores.map((store, index) => (
                 <motion.button 
                   key={store.id} 
+                  onClick={() => navigate(`/store/${store.id}`)}
                   initial={{ opacity: 0, y: 10 }} 
                   animate={{ opacity: 1, y: 0 }} 
                   exit={{ opacity: 0, y: -10 }} 

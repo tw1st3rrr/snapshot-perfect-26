@@ -227,14 +227,18 @@ const Profile = () => {
           </div>
           <div className="flex gap-3 overflow-x-auto pb-2 scrollbar-hide">
             {brands.filter(b => selectedBrands.includes(b.id)).map((brand) => (
-              <div key={brand.id} className="flex-shrink-0 w-20 text-center">
+              <button 
+                key={brand.id} 
+                onClick={() => navigate(`/store/${brand.id}`)}
+                className="flex-shrink-0 w-20 text-center"
+              >
                 <img 
                   src={brand.logo} 
                   alt={brand.name}
-                  className="w-16 h-16 rounded-xl object-cover mx-auto border border-border"
+                  className="w-16 h-16 rounded-xl object-cover mx-auto border border-border hover:border-primary transition-colors"
                 />
                 <p className="text-xs text-muted-foreground mt-1.5 truncate">{brand.name}</p>
-              </div>
+              </button>
             ))}
           </div>
           {selectedBrands.length > 0 && (
@@ -297,7 +301,11 @@ const Profile = () => {
           </div>
           <div className="flex gap-3 overflow-x-auto pb-2 scrollbar-hide">
             {favoriteShops.map((shop) => (
-              <div key={shop.id} className="flex-shrink-0 w-28 bg-card rounded-xl border border-border overflow-hidden">
+              <button 
+                key={shop.id} 
+                onClick={() => navigate(`/store/${shop.id}`)}
+                className="flex-shrink-0 w-28 bg-card rounded-xl border border-border overflow-hidden hover:border-primary transition-colors text-left"
+              >
                 <img src={shop.image} alt={shop.name} className="w-full h-20 object-cover" />
                 <div className="p-2">
                   <p className="font-medium text-foreground text-sm truncate">{shop.name}</p>
@@ -306,7 +314,7 @@ const Profile = () => {
                     <span className="text-xs text-muted-foreground">{shop.rating}</span>
                   </div>
                 </div>
-              </div>
+              </button>
             ))}
           </div>
         </motion.div>
