@@ -1,9 +1,13 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { 
   ChevronRight, 
-  Search, 
+  Store, 
+  Utensils, 
+  Camera,
   Gift, 
   Car,
+  Calendar,
+  Clock,
   X,
   User,
   Star,
@@ -59,76 +63,14 @@ const latestStory = {
 };
 
 const quickActions = [
-  { id: 1, icon: Car, label: "Find a carpark", path: "/navigation", action: "parking" },
-  { id: 2, icon: Search, label: "Search for a brand", path: "/navigation", filter: "stores" },
-  { id: 3, icon: Gift, label: "Gift cards", path: "/loyalty" },
+  { id: 1, icon: Store, label: "Stores", path: "/navigation", filter: "stores" },
+  { id: 2, icon: Utensils, label: "Restaurants", path: "/navigation", filter: "food" },
+  { id: 3, icon: Camera, label: "Scan", isMain: true, path: "/loyalty" },
+  { id: 4, icon: Gift, label: "Rewards", path: "/loyalty" },
+  { id: 5, icon: Car, label: "Parking", path: "/navigation", action: "parking" },
 ];
 
-// Featured content for "What's On" section
-const featuredContent = [
-  { 
-    id: 1, 
-    type: "news",
-    category: "Premium Guest Services",
-    title: "Premium Guest Services", 
-    description: "From seamless Valet Parking to curated Personal Stylist sessions, make every moment memorable with...",
-    date: "14 JAN",
-    image: "https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?w=600&h=400&fit=crop"
-  },
-];
-
-const mustDoContent = [
-  { 
-    id: 1, 
-    type: "news",
-    subtitle: "Moncler | Year of the...",
-    title: "The New Year collection", 
-    date: "22 JAN",
-    image: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=300&h=400&fit=crop"
-  },
-  { 
-    id: 2, 
-    type: "news",
-    subtitle: "Your Future Wellness...",
-    title: "KĀYA Wellness", 
-    date: "22 JAN",
-    image: "https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=300&h=400&fit=crop"
-  },
-  { 
-    id: 3, 
-    type: "news",
-    subtitle: "Sanctuary Premium...",
-    title: "Five Senses", 
-    date: "22 JAN",
-    image: "https://images.unsplash.com/photo-1600334129128-685c5582fd35?w=300&h=400&fit=crop"
-  },
-];
-
-const eventsContent = [
-  { 
-    id: 1, 
-    title: "New Year Sale", 
-    date: "Until Jan 15",
-    time: "10:00 - 22:00",
-    image: "https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?w=300&h=200&fit=crop"
-  },
-  { 
-    id: 2, 
-    title: "Kids Workshop", 
-    date: "Jan 28",
-    time: "14:00",
-    image: "https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=300&h=200&fit=crop"
-  },
-  { 
-    id: 3, 
-    title: "Live Concert", 
-    date: "Jan 31",
-    time: "20:00",
-    image: "https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=300&h=200&fit=crop"
-  },
-];
-
-const offersContent = [
+const trendingStores = [
   { 
     id: 1, 
     name: "Zara", 
@@ -145,14 +87,71 @@ const offersContent = [
   },
   { 
     id: 3, 
+    name: "Apple Store", 
+    category: "Electronics", 
+    discount: null, 
+    image: "https://images.unsplash.com/photo-1491933382434-500287f9b54b?w=300&h=200&fit=crop" 
+  },
+  { 
+    id: 4, 
     name: "H&M", 
     category: "Fashion", 
     discount: "50% OFF", 
     image: "https://images.unsplash.com/photo-1441984904996-e0b6ba687e04?w=300&h=200&fit=crop" 
   },
+  { 
+    id: 5, 
+    name: "Sephora", 
+    category: "Beauty", 
+    discount: "25% OFF", 
+    image: "https://images.unsplash.com/photo-1596462502278-27bfdc403348?w=300&h=200&fit=crop" 
+  },
+  { 
+    id: 6, 
+    name: "Starbucks", 
+    category: "Food & Drink", 
+    discount: null, 
+    image: "https://images.unsplash.com/photo-1453614512568-c4024d13c247?w=300&h=200&fit=crop" 
+  },
 ];
 
-type WhatsOnTab = "featured" | "events" | "offers";
+const upcomingEvents = [
+  { 
+    id: 1, 
+    title: "New Year Sale", 
+    date: "Until Jan 15",
+    time: "10:00 - 22:00",
+    image: "https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?w=300&h=200&fit=crop"
+  },
+  { 
+    id: 2, 
+    title: "Kids Workshop", 
+    date: "Dec 28",
+    time: "14:00",
+    image: "https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=300&h=200&fit=crop"
+  },
+  { 
+    id: 3, 
+    title: "Live Concert", 
+    date: "Dec 31",
+    time: "20:00",
+    image: "https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=300&h=200&fit=crop"
+  },
+  { 
+    id: 4, 
+    title: "Fashion Show", 
+    date: "Jan 5",
+    time: "18:00",
+    image: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=300&h=200&fit=crop"
+  },
+  { 
+    id: 5, 
+    title: "Art Exhibition", 
+    date: "Jan 10",
+    time: "11:00",
+    image: "https://images.unsplash.com/photo-1531243269054-5ebf6f34081e?w=300&h=200&fit=crop"
+  },
+];
 
 const Home = () => {
   const navigate = useNavigate();
@@ -162,7 +161,6 @@ const Home = () => {
   const [isMallSelectorOpen, setIsMallSelectorOpen] = useState(false);
   const [isStoryOpen, setIsStoryOpen] = useState(false);
   const [currentSlide, setCurrentSlide] = useState(0);
-  const [activeTab, setActiveTab] = useState<WhatsOnTab>("featured");
 
   const handleQuickAction = (action: typeof quickActions[0]) => {
     navigate(action.path);
@@ -190,7 +188,7 @@ const Home = () => {
   return (
     <PageLayout showMenu={false}>
       {/* Header with Hero Image */}
-      <div className="relative h-[38vh] min-h-[280px]">
+      <div className="relative h-[35vh] min-h-[240px]">
         <motion.img
           src={heroImage}
           alt="Mall Interior"
@@ -199,7 +197,7 @@ const Home = () => {
           animate={{ scale: 1 }}
           transition={{ duration: 0.8 }}
         />
-        {/* Light gradient overlay at bottom */}
+        {/* Gradient overlay - fades to background */}
         <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-transparent to-background" />
         
         {/* Profile icon in top left - black circle */}
@@ -245,25 +243,69 @@ const Home = () => {
         </motion.div>
       </div>
 
-      {/* Quick Actions - 3 outlined cards */}
-      <div className="px-5 mt-6">
+      {/* Stories / Latest Updates */}
+      <div className="px-5 mt-5">
         <motion.div
-          className="grid grid-cols-3 gap-3"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.25 }}
+        >
+          <h2 className="text-sm font-semibold text-muted-foreground mb-3">
+            Latest Updates
+          </h2>
+          <motion.button
+            onClick={openStory}
+            className="flex flex-col items-center gap-1.5"
+            whileTap={{ scale: 0.95 }}
+          >
+            <div className={`w-20 h-20 rounded-full p-0.5 ${latestStory.isNew ? 'bg-gradient-to-br from-amber-400 to-amber-600' : 'bg-muted'} relative`}>
+              <img
+                src={latestStory.image}
+                alt={latestStory.title}
+                className="w-full h-full rounded-full object-cover border-2 border-background"
+              />
+              {latestStory.isNew && (
+                <span className="absolute -bottom-1 left-1/2 -translate-x-1/2 text-[10px] font-semibold bg-amber-500 text-white px-2 py-0.5 rounded-full">
+                  New
+                </span>
+              )}
+            </div>
+            <span className="text-xs text-muted-foreground font-medium text-center">
+              {latestStory.title}
+            </span>
+          </motion.button>
+        </motion.div>
+      </div>
+
+      {/* Quick Actions - 5 items with centered Scan button */}
+      <div className="px-5 mt-5">
+        <motion.div
+          className="flex items-end justify-between gap-1"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.3 }}
         >
           {quickActions.map((action) => {
             const Icon = action.icon;
+            const isMain = action.isMain;
+            
             return (
               <motion.button
                 key={action.id}
                 onClick={() => handleQuickAction(action)}
-                className="flex flex-col items-center gap-3 p-4 bg-card border border-border rounded-2xl hover:border-muted-foreground transition-colors"
-                whileTap={{ scale: 0.97 }}
+                className={`flex flex-col items-center gap-2 ${isMain ? 'relative -top-1' : ''}`}
+                whileTap={{ scale: 0.95 }}
               >
-                <Icon className="w-6 h-6 text-foreground" />
-                <span className="text-xs font-medium text-foreground text-center leading-tight">
+                <div className={`flex items-center justify-center rounded-2xl shadow-sm transition-all ${
+                  isMain 
+                    ? 'w-16 h-16 bg-foreground text-background shadow-md' 
+                    : 'w-14 h-14 bg-card border border-border'
+                }`}>
+                  <Icon className={`${isMain ? 'w-7 h-7' : 'w-5 h-5 text-muted-foreground'}`} />
+                </div>
+                <span className={`text-xs font-medium text-center leading-tight ${
+                  isMain ? 'text-foreground' : 'text-muted-foreground'
+                }`}>
                   {action.label}
                 </span>
               </motion.button>
@@ -272,229 +314,98 @@ const Home = () => {
         </motion.div>
       </div>
 
-      {/* What's On section */}
-      <div className="mt-8">
+      {/* Trending Now */}
+      <div className="mt-7">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.4 }}
         >
-          <div className="px-5 mb-4">
-            <h2 className="font-display text-xl font-bold text-foreground tracking-wide">
-              WHAT'S ON
+          <div className="flex items-center justify-between px-5 mb-3">
+            <h2 className="font-display text-lg font-semibold text-foreground">
+              Trending Now
             </h2>
-          </div>
-
-          {/* Tabs */}
-          <div className="flex gap-2 px-5 mb-5">
-            <button
-              onClick={() => setActiveTab("featured")}
-              className={`flex items-center gap-2 px-4 py-2.5 rounded-full text-sm font-semibold transition-all ${
-                activeTab === "featured"
-                  ? "bg-foreground text-background"
-                  : "bg-secondary text-muted-foreground"
-              }`}
-            >
-              <Star className="w-4 h-4" />
-              FEATURED
-            </button>
-            <button
-              onClick={() => setActiveTab("events")}
-              className={`flex items-center gap-2 px-4 py-2.5 rounded-full text-sm font-semibold transition-all ${
-                activeTab === "events"
-                  ? "bg-foreground text-background"
-                  : "bg-secondary text-muted-foreground"
-              }`}
-            >
-              <CalendarDays className="w-4 h-4" />
-              EVENTS
-            </button>
-            <button
-              onClick={() => setActiveTab("offers")}
-              className={`flex items-center gap-2 px-4 py-2.5 rounded-full text-sm font-semibold transition-all ${
-                activeTab === "offers"
-                  ? "bg-foreground text-background"
-                  : "bg-secondary text-muted-foreground"
-              }`}
-            >
-              <Tag className="w-4 h-4" />
-              OFFERS
+            <button onClick={() => navigate("/stores")} className="flex items-center gap-0.5 text-sm text-muted-foreground hover:text-foreground transition-colors">
+              See All
+              <ChevronRight className="w-4 h-4" />
             </button>
           </div>
 
-          {/* Tab Content */}
-          <AnimatePresence mode="wait">
-            {activeTab === "featured" && (
+          <div className="flex gap-3 overflow-x-auto px-5 pb-2 scrollbar-hide">
+            {trendingStores.map((store, index) => (
               <motion.div
-                key="featured"
+                key={store.id}
                 initial={{ opacity: 0, x: 20 }}
                 animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0, x: -20 }}
-                transition={{ duration: 0.2 }}
+                transition={{ delay: 0.5 + index * 0.1 }}
+                onClick={() => navigate(`/store/${store.id}`)}
+                className="min-w-[160px] bg-card rounded-2xl overflow-hidden border border-border shadow-sm cursor-pointer hover:border-muted-foreground transition-colors"
               >
-                {/* Must Do subsection */}
-                <div className="px-5 mb-4">
-                  <div className="flex items-center gap-2">
-                    <Check className="w-4 h-4 text-foreground" />
-                    <h3 className="font-display text-base font-bold text-foreground">MUST DO</h3>
+                <div className="relative h-24 overflow-hidden">
+                  <img src={store.image} alt={store.name} className="w-full h-full object-cover" />
+                  {store.discount && (
+                    <span className="absolute top-2 left-2 text-xs font-semibold px-2 py-0.5 rounded-full bg-destructive text-destructive-foreground">{store.discount}</span>
+                  )}
+                </div>
+                <div className="p-3">
+                  <h3 className="font-display font-semibold text-foreground">{store.name}</h3>
+                  <p className="text-xs text-muted-foreground mt-0.5">{store.category}</p>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        </motion.div>
+      </div>
+
+      {/* Upcoming Events */}
+      <div className="mt-6">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.5 }}
+        >
+          <div className="flex items-center justify-between px-5 mb-3">
+            <h2 className="font-display text-lg font-semibold text-foreground">
+              Upcoming Events
+            </h2>
+            <button onClick={() => navigate("/events")} className="flex items-center gap-0.5 text-sm text-muted-foreground hover:text-foreground transition-colors">
+              See All
+              <ChevronRight className="w-4 h-4" />
+            </button>
+          </div>
+
+          <div className="flex gap-3 overflow-x-auto px-5 pb-2 scrollbar-hide">
+            {upcomingEvents.map((event, index) => (
+              <motion.div
+                key={event.id}
+                initial={{ opacity: 0, x: 20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: 0.6 + index * 0.1 }}
+                onClick={() => navigate(`/event/${event.id}`)}
+                className="min-w-[200px] bg-card rounded-2xl overflow-hidden border border-border shadow-sm cursor-pointer hover:border-muted-foreground transition-colors"
+              >
+                <div className="relative h-24 overflow-hidden">
+                  <img src={event.image} alt={event.title} className="w-full h-full object-cover" />
+                </div>
+                <div className="p-3">
+                  <h3 className="font-display font-semibold text-foreground">{event.title}</h3>
+                  <div className="flex items-center gap-1 mt-1.5 text-muted-foreground">
+                    <Calendar className="w-3.5 h-3.5" />
+                    <span className="text-xs">{event.date}</span>
+                  </div>
+                  <div className="flex items-center gap-1 mt-0.5 text-muted-foreground">
+                    <Clock className="w-3.5 h-3.5" />
+                    <span className="text-xs">{event.time}</span>
                   </div>
                 </div>
-
-                {/* Featured main card */}
-                <div className="px-5 mb-6">
-                  {featuredContent.map((item) => (
-                    <div 
-                      key={item.id} 
-                      className="bg-card rounded-2xl overflow-hidden border border-border cursor-pointer"
-                      onClick={() => navigate(`/event/${item.id}`)}
-                    >
-                      <div className="relative h-44 overflow-hidden">
-                        <img src={item.image} alt={item.title} className="w-full h-full object-cover" />
-                        <span className="absolute bottom-3 left-3 flex items-center gap-1.5 bg-card/90 backdrop-blur-sm text-foreground text-xs font-semibold px-3 py-1.5 rounded-full">
-                          <Newspaper className="w-3.5 h-3.5" />
-                          NEWS
-                        </span>
-                      </div>
-                      <div className="p-4">
-                        <p className="text-sm text-muted-foreground">{item.category}</p>
-                        <h4 className="font-display text-lg font-bold text-foreground mt-1">{item.title}</h4>
-                        <p className="text-sm text-muted-foreground mt-2 line-clamp-2">{item.description}</p>
-                        <p className="text-xs text-muted-foreground mt-3 font-medium">{item.date}</p>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-
-                {/* New subsection */}
-                <div className="px-5 mb-4">
-                  <div className="flex items-center gap-2">
-                    <Sparkles className="w-4 h-4 text-foreground" />
-                    <h3 className="font-display text-base font-bold text-foreground">NEW</h3>
-                  </div>
-                </div>
-
-                {/* New items grid - horizontal scroll */}
-                <div className="flex gap-3 overflow-x-auto px-5 pb-4 scrollbar-hide">
-                  {mustDoContent.map((item, index) => (
-                    <motion.div
-                      key={item.id}
-                      initial={{ opacity: 0, x: 20 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      transition={{ delay: 0.5 + index * 0.1 }}
-                      onClick={() => navigate(`/event/${item.id}`)}
-                      className="min-w-[180px] cursor-pointer"
-                    >
-                      <div className="relative h-56 rounded-2xl overflow-hidden">
-                        <img src={item.image} alt={item.title} className="w-full h-full object-cover" />
-                        <span className="absolute bottom-3 left-3 flex items-center gap-1.5 bg-card/90 backdrop-blur-sm text-foreground text-xs font-semibold px-3 py-1.5 rounded-full">
-                          <Newspaper className="w-3.5 h-3.5" />
-                          NEWS
-                        </span>
-                      </div>
-                      <div className="mt-2">
-                        <p className="text-xs text-muted-foreground truncate">{item.subtitle}</p>
-                        <h4 className="font-display font-bold text-foreground mt-0.5">{item.title}</h4>
-                        <p className="text-xs text-muted-foreground mt-1">{item.date}</p>
-                      </div>
-                    </motion.div>
-                  ))}
-                </div>
               </motion.div>
-            )}
-
-            {activeTab === "events" && (
-              <motion.div
-                key="events"
-                initial={{ opacity: 0, x: 20 }}
-                animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0, x: -20 }}
-                transition={{ duration: 0.2 }}
-              >
-                <div className="flex gap-3 overflow-x-auto px-5 pb-4 scrollbar-hide">
-                  {eventsContent.map((event, index) => (
-                    <motion.div
-                      key={event.id}
-                      initial={{ opacity: 0, x: 20 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      transition={{ delay: 0.1 + index * 0.1 }}
-                      onClick={() => navigate(`/event/${event.id}`)}
-                      className="min-w-[200px] bg-card rounded-2xl overflow-hidden border border-border cursor-pointer hover:border-muted-foreground transition-colors"
-                    >
-                      <div className="relative h-28 overflow-hidden">
-                        <img src={event.image} alt={event.title} className="w-full h-full object-cover" />
-                      </div>
-                      <div className="p-3">
-                        <h3 className="font-display font-semibold text-foreground">{event.title}</h3>
-                        <p className="text-xs text-muted-foreground mt-1">{event.date}</p>
-                        <p className="text-xs text-muted-foreground">{event.time}</p>
-                      </div>
-                    </motion.div>
-                  ))}
-                </div>
-                
-                <div className="px-5 mt-2">
-                  <button 
-                    onClick={() => navigate("/events")}
-                    className="flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground transition-colors"
-                  >
-                    See all events
-                    <ChevronRight className="w-4 h-4" />
-                  </button>
-                </div>
-              </motion.div>
-            )}
-
-            {activeTab === "offers" && (
-              <motion.div
-                key="offers"
-                initial={{ opacity: 0, x: 20 }}
-                animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0, x: -20 }}
-                transition={{ duration: 0.2 }}
-              >
-                <div className="flex gap-3 overflow-x-auto px-5 pb-4 scrollbar-hide">
-                  {offersContent.map((store, index) => (
-                    <motion.div
-                      key={store.id}
-                      initial={{ opacity: 0, x: 20 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      transition={{ delay: 0.1 + index * 0.1 }}
-                      onClick={() => navigate(`/store/${store.id}`)}
-                      className="min-w-[160px] bg-card rounded-2xl overflow-hidden border border-border cursor-pointer hover:border-muted-foreground transition-colors"
-                    >
-                      <div className="relative h-24 overflow-hidden">
-                        <img src={store.image} alt={store.name} className="w-full h-full object-cover" />
-                        {store.discount && (
-                          <span className="absolute top-2 left-2 text-xs font-semibold px-2 py-0.5 rounded-full bg-destructive text-destructive-foreground">
-                            {store.discount}
-                          </span>
-                        )}
-                      </div>
-                      <div className="p-3">
-                        <h3 className="font-display font-semibold text-foreground">{store.name}</h3>
-                        <p className="text-xs text-muted-foreground mt-0.5">{store.category}</p>
-                      </div>
-                    </motion.div>
-                  ))}
-                </div>
-                
-                <div className="px-5 mt-2">
-                  <button 
-                    onClick={() => navigate("/stores")}
-                    className="flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground transition-colors"
-                  >
-                    See all offers
-                    <ChevronRight className="w-4 h-4" />
-                  </button>
-                </div>
-              </motion.div>
-            )}
-          </AnimatePresence>
+            ))}
+          </div>
         </motion.div>
       </div>
 
       {/* Bottom spacing */}
-      <div className="h-8" />
+      <div className="h-6" />
 
       {/* Mall Selector Modal */}
       <Dialog open={isMallSelectorOpen} onOpenChange={setIsMallSelectorOpen}>
